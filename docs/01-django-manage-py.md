@@ -27,7 +27,7 @@ pwd
 git rev-parse --show-toplevel
 ```
 
-Kết quả đúng của hai lệnh kiểm tra đường dẫn là `/home/quangnt/tech_learn/tech_learn`.
+Kết quả đúng của hai lệnh kiểm tra đường dẫn là `~/tech_learn/tech_learn`.
 
 ## 2. Vì sao Django có `manage.py`?
 
