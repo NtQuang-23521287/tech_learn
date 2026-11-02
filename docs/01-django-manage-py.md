@@ -29,9 +29,7 @@ git rev-parse --show-toplevel
 
 Kết quả đúng của hai lệnh kiểm tra đường dẫn là `~/tech_learn/tech_learn`.
 
-## 2. Vì sao Django có `manage.py`?
-
-Tên chính xác là **`manage.py`**, không phải `manager.py`.
+## 2. Vì sao Django có `manager.py`?
 
 Đây là file tiện ích dòng lệnh thường được Django tạo tự động khi dùng `django-admin startproject`. File này giúp chạy các tác vụ quản lý dự án:
 
