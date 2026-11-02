@@ -1,0 +1,13 @@
+# Python virtual environment
+.techlearn/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Local SQLite database
+db.sqlite3
