@@ -71,3 +71,5 @@ DATABASES = {
     }
 }
 
+# WSGI application
+WSGI_APPLICATION = "config.wsgi.application"
