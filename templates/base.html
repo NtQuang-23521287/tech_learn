@@ -1,0 +1,52 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}TechLearn{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container nav-container">
+
+            <a href="{% url 'core:home' %}" class="logo">
+                <span class="logo-icon">&gt;_</span>
+                Tech<span>Learn</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'core:home' %}">Trang chủ</a>
+                <a href="{% url 'courses:list' %}">Khóa học</a>
+                <a href="{% url 'core:home' %}#learning-paths">Lộ trình học</a>
+                <a href="/admin/">Quản trị</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>
+                © {% now "Y" %} TechLearn.
+                Learn IT. Practice IT.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

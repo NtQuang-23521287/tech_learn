@@ -1,0 +1,60 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Khóa học — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="catalog-section">
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="eyebrow">TECHLEARN COURSES</span>
+            <h1>Khám phá khóa học</h1>
+            <p>
+                Phát triển kỹ năng Linux, Networking,
+                System Administration và DevOps.
+            </p>
+        </div>
+
+        <div class="course-grid">
+
+            {% for course in courses %}
+                <article class="course-card">
+
+                    <span class="eyebrow">
+                        {{ course.category.name }}
+                    </span>
+
+                    <h3>
+                        <a href="{% url 'courses:detail' course.slug %}">
+                            {{ course.title }}
+                        </a>
+                    </h3>
+
+                    <p>{{ course.summary|truncatewords:30 }}</p>
+
+                    <div class="course-meta">
+                        <span>{{ course.get_level_display }}</span>
+
+                        {% if not course.is_published %}
+                            <span class="draft-label">Bản nháp</span>
+                        {% endif %}
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <p class="empty-message">
+                    Hiện chưa có khóa học nào được xuất bản.
+                </p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

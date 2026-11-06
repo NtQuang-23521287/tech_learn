@@ -1,0 +1,105 @@
+
+{% extends "base.html" %}
+
+{% block title %}TechLearn — Học IT thực chiến{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container hero-content">
+
+        <div class="hero-text">
+            <span class="eyebrow">
+                NỀN TẢNG HỌC IT THỰC HÀNH
+            </span>
+
+            <h1>
+                Learn IT.<br>
+                <span>Practice IT.</span>
+            </h1>
+
+            <p>
+                Học Linux, Networking, System Administration
+                và DevOps thông qua kiến thức nền tảng,
+                bài tập và các dự án thực tế.
+            </p>
+
+            <a href="#learning-paths" class="btn-primary">
+                Khám phá lộ trình học
+            </a>
+        </div>
+
+        <div class="terminal-card">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="terminal-title">
+                    techlearn@linux:~
+                </span>
+            </div>
+
+            <div class="terminal-body">
+                <p><span>$</span> whoami</p>
+                <p class="output">future_system_engineer</p>
+
+                <p><span>$</span> echo "Hello TechLearn"</p>
+                <p class="output">Hello TechLearn</p>
+
+                <p><span>$</span> _</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="learning-section" id="learning-paths">
+
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="eyebrow">LEARNING PATHS</span>
+            <h2>Khám phá lộ trình học</h2>
+            <p>
+                Bắt đầu từ kiến thức cơ bản
+                và phát triển kỹ năng chuyên sâu.
+            </p>
+        </div>
+
+        <div class="course-grid">
+
+            <article class="course-card">
+                <div class="course-icon">🐧</div>
+                <h3>Linux Fundamentals</h3>
+                <p>
+                    Làm quen Linux, filesystem,
+                    command line và quản lý hệ thống.
+                </p>
+                <span class="course-badge">Sắp ra mắt</span>
+            </article>
+
+            <article class="course-card">
+                <div class="course-icon">🌐</div>
+                <h3>Networking</h3>
+                <p>
+                    Tìm hiểu TCP/IP, subnetting,
+                    routing, switching và DNS.
+                </p>
+                <span class="course-badge">Sắp ra mắt</span>
+            </article>
+
+            <article class="course-card">
+                <div class="course-icon">🖥️</div>
+                <h3>System Administration</h3>
+                <p>
+                    Quản trị server, dịch vụ,
+                    bảo mật và xử lý sự cố hệ thống.
+                </p>
+                <span class="course-badge">Sắp ra mắt</span>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
