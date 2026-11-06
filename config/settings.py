@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django_prose_editor",
     'apps.progress',
     "apps.quizzes",
+    "apps.labs",
 ]
 
 MIDDLEWARE = [

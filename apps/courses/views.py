@@ -5,7 +5,8 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from .models import Course, CourseModule, Lesson
 from apps.progress.models import Enrollment, LessonProgress
-from apps.quizzes.models import Quiz
+from apps.progress.services import get_course_progress
+from apps.labs.models import Lab
 
 
 def course_list(request):
@@ -35,59 +36,48 @@ def course_detail(request, slug):
 
     course = get_object_or_404(courses, slug=slug)
     
-    is_enrolled = (
-        request.user.is_authenticated
-        and course.enrollments.filter(
-            user=request.user
-        ).exists()
-    )
     
-    total_lessons = 0
-    completed_lessons = 0
-    progress_percent = 0
+    enrollment = None
 
-    if is_enrolled and course.is_published:
+    if request.user.is_authenticated:
+        enrollment = course.enrollments.filter(
+            user=request.user
+        ).first()
 
-        # Đếm các bài học đã xuất bản trong khóa học.
-        total_lessons = Lesson.objects.filter(
-            module__course=course,
-            is_published=True,
-        ).count()
+    is_enrolled = enrollment is not None
 
-        # Đếm các bài học học viên đã hoàn thành.
-        completed_lessons = LessonProgress.objects.filter(
-            enrollment__user=request.user,
-            enrollment__course=course,
-            lesson__module__course=course,
-            lesson__is_published=True,
-        ).count()
+    progress_data = get_course_progress(enrollment)
 
-        if total_lessons > 0:
-            progress_percent = round(
-                completed_lessons / total_lessons * 100
-            )
+    visible_labs = Lab.objects.all()
 
-
-    modules = CourseModule.objects.filter(course=course)
-
-    # Admin xem được các bài học đang ở trạng thái nháp.
-    if request.user.is_staff:
-        modules = modules.prefetch_related("lessons")
-    else:
-        modules = modules.prefetch_related(
-            Prefetch(
-                "lessons",
-                queryset=Lesson.objects.filter(is_published=True),
-            )
+    if not request.user.is_staff:
+        visible_labs = visible_labs.filter(
+            is_published=True
         )
+    
+    # Lấy Lesson và Quiz liên kết với từng bài học.
+    visible_lessons = Lesson.objects.select_related("quiz")
+
+    if not request.user.is_staff:
+        visible_lessons = visible_lessons.filter(
+            is_published=True
+        )
+
+    modules = CourseModule.objects.filter(
+        course=course
+    ).prefetch_related(
+        Prefetch(
+            "lessons",
+            queryset=visible_lessons,
+        )
+    )
+
 
     context = {
         "course": course,
         "modules": modules,
         "is_enrolled": is_enrolled,
-        "total_lessons": total_lessons,
-        "completed_lessons": completed_lessons,
-        "progress_percent": progress_percent,
+        **progress_data,
     }
 
     return render(
@@ -119,13 +109,6 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
     )
 
     course = lesson.module.course
-
-    quiz_query = Quiz.objects.filter(lesson=lesson)
-
-    if not request.user.is_staff:
-        quiz_query = quiz_query.filter(is_published=True)
-
-    lesson_quiz = quiz_query.first()
     
     # Lấy enrollment của học viên hiện tại.
     enrollment = None
@@ -212,6 +195,5 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
             "next_lesson": next_lesson,
             "is_enrolled": is_enrolled,
             "is_completed": is_completed,
-            "lesson_quiz": lesson_quiz,
         },
     )

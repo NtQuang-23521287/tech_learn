@@ -106,10 +106,33 @@
                     ></div>
                 </div>
 
-                <p>
-                    Đã hoàn thành {{ completed_lessons }}
-                    trên {{ total_lessons }} bài học.
-                </p>
+                
+                <div class="progress-breakdown">
+
+                    <p>
+                        📖 Bài học:
+                        <strong>
+                            {{ completed_lessons }}/{{ total_lessons }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        📝 Quiz đạt:
+                        <strong>
+                            {{ passed_quizzes }}/{{ total_quizzes }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Tổng tiến độ:
+                        <strong>
+                            {{ completed_activities }}/{{ total_activities }}
+                            hoạt động
+                        </strong>
+                    </p>
+
+                </div>
+
 
             </section>
 
@@ -136,33 +159,106 @@
                             {{ module.description }}
                         </p>
                     {% endif %}
-
+                    
                     <ul class="lesson-list">
 
                         {% for lesson in module.lessons.all %}
 
-                            <li>
-                                <span>
+                            <li class="curriculum-lesson-row">
+
+                                <!-- 1. Hiển thị Lesson -->
+                                <div class="curriculum-lesson-line">
+
                                     <a href="{% url 'courses:lesson_detail' course.slug module.id lesson.slug %}">
                                         📖 {{ lesson.title }}
                                     </a>
-                                </span>
 
-                                {% if not lesson.is_published %}
-                                    <span class="draft-label">
-                                        Bản nháp
-                                    </span>
+                                    {% if not lesson.is_published %}
+                                        <span class="draft-label">
+                                            Bản nháp
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- 2. Quiz nằm ngay dưới Lesson -->
+                                {% if lesson.quiz %}
+
+                                    {% if lesson.quiz.is_published or user.is_staff %}
+
+                                        <div class="curriculum-quiz">
+
+                                            {% if is_enrolled or user.is_staff %}
+
+                                                <a href="{% url 'quizzes:detail' lesson.quiz.id %}">
+                                                    📝 Quiz: {{ lesson.quiz.title }}
+                                                </a>
+
+                                            {% else %}
+
+                                                <span>
+                                                    🔒 Quiz: {{ lesson.quiz.title }}
+                                                </span>
+
+                                            {% endif %}
+
+                                            {% if not lesson.quiz.is_published %}
+                                                <span class="draft-label">
+                                                    Bản nháp
+                                                </span>
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+
                                 {% endif %}
+
+                                <!-- 3. Lab nằm dưới Quiz -->
+                                {% for lab in lesson.labs.all %}
+
+                                    {% if lab.is_published or user.is_staff %}
+
+                                        <div class="curriculum-lab">
+
+                                            {% if is_enrolled or user.is_staff %}
+
+                                                <a href="{% url 'labs:detail' lab.id %}">
+                                                    🖥️ Lab: {{ lab.title }}
+                                                </a>
+
+                                            {% else %}
+
+                                                <span>
+                                                    🔒 Lab: {{ lab.title }}
+                                                </span>
+
+                                            {% endif %}
+
+                                            {% if not lab.is_published %}
+                                                <span class="draft-label">
+                                                    Bản nháp
+                                                </span>
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
                             </li>
 
                         {% empty %}
 
-                            <li>Chưa có bài học được xuất bản.</li>
+                            <li class="empty-lessons">
+                                Chương này chưa có bài học.
+                            </li>
 
                         {% endfor %}
 
                     </ul>
-
+                    
                 </div>
 
             {% empty %}

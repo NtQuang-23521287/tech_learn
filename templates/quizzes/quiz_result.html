@@ -1,0 +1,95 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Kết quả Quiz — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="quiz-result-page">
+    <div class="container quiz-container">
+
+        <div class="quiz-result-card">
+
+            {% if attempt.passed %}
+
+                <div class="result-icon passed">
+                    ✓
+                </div>
+
+                <h1>Chúc mừng! Bạn đã đạt.</h1>
+
+            {% else %}
+
+                <div class="result-icon failed">
+                    !
+                </div>
+
+                <h1>Bạn chưa đạt yêu cầu.</h1>
+
+            {% endif %}
+
+            <p class="result-quiz-title">
+                {{ quiz.title }}
+            </p>
+
+            <div class="result-score">
+                {{ attempt.score_percent }}%
+            </div>
+
+            <div class="result-stats">
+
+                <div>
+                    <strong>{{ attempt.correct_answers }}</strong>
+                    <span>Số câu đúng</span>
+                </div>
+
+                <div>
+                    <strong>{{ attempt.total_questions }}</strong>
+                    <span>Tổng số câu</span>
+                </div>
+
+                <div>
+                    <strong>{{ quiz.passing_score }}%</strong>
+                    <span>Điểm yêu cầu</span>
+                </div>
+
+            </div>
+
+            <p class="result-date">
+                Nộp bài lúc:
+                {{ attempt.submitted_at|date:"H:i d/m/Y" }}
+            </p>
+
+            <div class="result-actions">
+
+                <a
+                    href="{% url 'quizzes:detail' quiz.id %}"
+                    class="btn-primary"
+                >
+                    Lịch sử và làm lại Quiz
+                </a>
+
+                <a
+                    href="{% url 'quizzes:history' %}"
+                    class="result-back-link"
+                >
+                    Xem lịch sử Quiz
+                </a>
+
+                <a
+                    href="{% url 'courses:detail' course.slug %}"
+                    class="result-back-link"
+                >
+                    Quay lại khóa học
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

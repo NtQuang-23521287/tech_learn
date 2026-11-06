@@ -1,0 +1,199 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Lịch sử Quiz — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="quiz-history-page">
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="eyebrow">MY QUIZ HISTORY</span>
+
+            <h1>Lịch sử bài kiểm tra</h1>
+
+            <p>
+                Xem kết quả và theo dõi sự tiến bộ của bạn.
+            </p>
+        </div>
+
+        <!-- Overall statistics -->
+        <div class="history-overview">
+
+            <div class="history-stat">
+                <span>Tổng lượt làm</span>
+
+                <strong>
+                    {{ overall_stats.total_attempts }}
+                </strong>
+            </div>
+
+            <div class="history-stat">
+                <span>Điểm cao nhất</span>
+
+                <strong>
+                    {% if overall_stats.best_score is not None %}
+                        {{ overall_stats.best_score }}%
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+            </div>
+
+        </div>
+
+        <!-- Statistics by quiz -->
+        {% if quiz_stats %}
+
+            <h2 class="history-section-title">
+                Tổng quan theo bài kiểm tra
+            </h2>
+
+            <div class="history-summary-grid">
+
+                {% for stat in quiz_stats %}
+
+                    <article class="history-summary-card">
+
+                        <h3>{{ stat.quiz__title }}</h3>
+
+                        <p>
+                            Số lần làm:
+                            <strong>{{ stat.attempt_count }}</strong>
+                        </p>
+
+                        <p>
+                            Số lần đạt:
+                            <strong>{{ stat.passed_count }}</strong>
+                        </p>
+
+                        <p>
+                            Điểm cao nhất:
+                            <strong class="history-best-score">
+                                {{ stat.best_score }}%
+                            </strong>
+                        </p>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+        <!-- Attempt history -->
+        <h2 class="history-section-title">
+            Các lần làm bài
+        </h2>
+
+        {% if page_obj.paginator.count %}
+
+            <div class="history-table-wrapper">
+
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày làm</th>
+                            <th>Bài kiểm tra</th>
+                            <th>Số câu đúng</th>
+                            <th>Điểm</th>
+                            <th>Kết quả</th>
+                            <th>Chi tiết</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for attempt in page_obj %}
+
+                            <tr>
+                                <td>
+                                    {{ attempt.submitted_at|date:"d/m/Y H:i" }}
+                                </td>
+
+                                <td>{{ attempt.quiz.title }}</td>
+
+                                <td>
+                                    {{ attempt.correct_answers }}/{{ attempt.total_questions }}
+                                </td>
+
+                                <td class="history-score">
+                                    {{ attempt.score_percent }}%
+                                </td>
+
+                                <td>
+                                    {% if attempt.passed %}
+                                        <span class="history-status passed">
+                                            Đạt
+                                        </span>
+                                    {% else %}
+                                        <span class="history-status failed">
+                                            Chưa đạt
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <a href="{% url 'quizzes:result' attempt.id %}">
+                                        Xem kết quả
+                                    </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+
+                <div class="history-pagination">
+
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}">
+                            ← Trước
+                        </a>
+                    {% endif %}
+
+                    <span>
+                        Trang {{ page_obj.number }}
+                        / {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">
+                            Tiếp →
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="empty-learning">
+                <h2>Bạn chưa làm bài kiểm tra nào</h2>
+
+                <p>
+                    Hãy tham gia một khóa học và làm Quiz đầu tiên.
+                </p>
+
+                <a href="{% url 'courses:list' %}" class="btn-primary">
+                    Khám phá khóa học
+                </a>
+            </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

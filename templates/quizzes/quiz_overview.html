@@ -1,0 +1,172 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+{{ quiz.title }} — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="quiz-overview-page">
+    <div class="container quiz-container">
+
+        <a href="{% url 'courses:detail' course.slug %}"
+           class="back-link">
+            ← Quay lại khóa học
+        </a>
+
+        <div class="quiz-heading">
+            <span class="eyebrow">TECHLEARN QUIZ</span>
+
+            <h1>{{ quiz.title }}</h1>
+
+            <p>
+                Bài học: {{ lesson.title }}
+            </p>
+
+            <p>
+                Điểm đạt yêu cầu: {{ quiz.passing_score }}%
+            </p>
+        </div>
+
+        <h2 class="overview-title">
+            Lịch sử làm bài của bạn
+        </h2>
+
+        <div class="overview-stats">
+
+            <div class="overview-stat">
+                <span>Số lần đã làm</span>
+                <strong>{{ stats.total_attempts }}</strong>
+            </div>
+
+            <div class="overview-stat">
+                <span>Điểm cao nhất</span>
+
+                <strong>
+                    {% if stats.best_score is not None %}
+                        {{ stats.best_score }}%
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+            </div>
+
+        </div>
+
+        {% if stats.total_attempts %}
+
+            <div class="overview-history">
+
+                {% for attempt in page_obj %}
+
+                    <div class="overview-attempt">
+
+                        <div>
+                            <strong>
+                                {{ attempt.score_percent }}%
+                            </strong>
+
+                            <p>
+                                {{ attempt.submitted_at|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+
+                        <div class="overview-attempt-actions">
+
+                            {% if attempt.passed %}
+                                <span class="history-status passed">
+                                    Đạt
+                                </span>
+                            {% else %}
+                                <span class="history-status failed">
+                                    Chưa đạt
+                                </span>
+                            {% endif %}
+
+                            <a href="{% url 'quizzes:result' attempt.id %}">
+                                Xem kết quả
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% if page_obj.has_other_pages %}
+
+                <div class="history-pagination">
+
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}">
+                            ← Trước
+                        </a>
+                    {% endif %}
+
+                    <span>
+                        Trang {{ page_obj.number }}
+                        / {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">
+                            Tiếp →
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="overview-empty">
+                <h3>Bạn chưa làm Quiz này</h3>
+
+                <p>
+                    Hãy bắt đầu bài kiểm tra đầu tiên
+                    để đánh giá kiến thức đã học.
+                </p>
+            </div>
+
+        {% endif %}
+
+        <!-- Nút bắt đầu Quiz ở cuối trang lịch sử -->
+
+        <div class="overview-start">
+
+            {% if quiz.is_published and lesson.is_published and course.is_published %}
+
+                <a href="{% url 'quizzes:take' quiz.id %}"
+                   class="btn-primary">
+
+                    {% if stats.total_attempts %}
+                        Làm lại Quiz
+                    {% else %}
+                        Bắt đầu làm Quiz
+                    {% endif %}
+
+                </a>
+
+            {% elif user.is_staff %}
+
+                <p class="draft-label">
+                    Quiz đang ở bản nháp.
+                </p>
+
+                <a href="{% url 'quizzes:take' quiz.id %}"
+                   class="btn-primary">
+                    Xem trước đề Quiz
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+{{ lab.title }} — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="lab-page">
+    <div class="container">
+
+        <a
+            href="{% url 'courses:detail' course.slug %}"
+            class="back-link"
+        >
+            ← Quay lại khóa học
+        </a>
+
+        <div class="lab-heading">
+
+            <span class="eyebrow">
+                TECHLEARN LINUX LAB
+            </span>
+
+            <h1>{{ lab.title }}</h1>
+
+            <p>{{ lab.description }}</p>
+
+            <div class="lab-meta">
+                <span>
+                    Mức độ: {{ lab.get_difficulty_display }}
+                </span>
+
+                <span>
+                    Thời gian: {{ lab.estimated_minutes }} phút
+                </span>
+
+                <span>
+                    {{ tasks|length }} nhiệm vụ
+                </span>
+            </div>
+
+            {% if not lab.is_published %}
+                <p class="draft-label">
+                    Bản xem trước — chưa xuất bản
+                </p>
+            {% endif %}
+
+        </div>
+
+        <div class="lab-layout">
+
+            <div class="lab-instructions">
+
+                <h2>Hướng dẫn thực hành</h2>
+
+                <div class="lesson-content">
+                    {{ lab.instructions|safe }}
+                </div>
+
+                <h2>Nhiệm vụ cần hoàn thành</h2>
+
+                {% for task in tasks %}
+
+                    <article class="lab-task">
+
+                        <div class="lab-task-number">
+                            Task {{ task.order }}
+                        </div>
+
+                        <h3>{{ task.title }}</h3>
+
+                        <p>{{ task.instructions|linebreaksbr }}</p>
+
+                    </article>
+
+                {% empty %}
+
+                    <p>
+                        Lab chưa có nhiệm vụ thực hành.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+            <aside class="lab-terminal-panel">
+
+                <h2>Linux Terminal</h2>
+
+                <div class="lab-terminal-placeholder">
+
+                    <div class="terminal-placeholder-header">
+                        <span>●</span>
+                        <span>●</span>
+                        <span>●</span>
+                        <small>techlearn@lab:~</small>
+                    </div>
+
+                    <div class="terminal-placeholder-content">
+
+                        <p class="terminal-prompt">
+                            student@lab:~$
+                        </p>
+
+                        <p class="terminal-notice">
+                            Môi trường thực hành chưa được kích hoạt.
+                        </p>
+
+                        <p>
+                            Terminal thật sẽ được triển khai
+                            trong Bài 18C–18D.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

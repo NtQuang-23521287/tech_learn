@@ -41,10 +41,26 @@
                             </div>
                         </div>
 
-                        <p>
-                            {{ item.completed }}/{{ item.total }}
-                            bài học đã hoàn thành
-                        </p>
+                        
+                        <div class="learning-progress-details">
+
+                            <p>
+                                📖 {{ item.completed_lessons }}/{{ item.total_lessons }}
+                                bài học
+                            </p>
+
+                            <p>
+                                📝 {{ item.passed_quizzes }}/{{ item.total_quizzes }}
+                                Quiz đã đạt
+                            </p>
+
+                            <p>
+                                {{ item.completed }}/{{ item.total }}
+                                hoạt động hoàn thành
+                            </p>
+
+                        </div>
+
 
                         <a
                             href="{% url 'courses:detail' item.course.slug %}"

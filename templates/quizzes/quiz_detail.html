@@ -10,11 +10,9 @@
 <section class="quiz-page">
     <div class="container quiz-container">
 
-        <a
-            href="{% url 'courses:detail' course.slug %}"
-            class="back-link"
-        >
-            ← Quay lại khóa học
+        <a href="{% url 'quizzes:detail' quiz.id %}"
+        class="back-link">
+            ← Quay lại lịch sử Quiz
         </a>
 
         <div class="quiz-heading">
@@ -40,7 +38,7 @@
 
         {% if quiz_ready %}
 
-            <form method="post" class="quiz-form">
+            <form method="post" action="{% url 'quizzes:submit' quiz.id %}" class="quiz-form">
                 {% csrf_token %}
 
                 {% for question in questions %}
@@ -87,14 +85,12 @@
                     <button
                         type="submit"
                         class="btn-primary"
-                        disabled
                     >
-                        Nộp bài
+                        Nộp bài và xem kết quả
                     </button>
 
                     <p>
-                        Chức năng nộp bài sẽ được
-                        kích hoạt trong Bài 17D.
+                        Kiểm tra các đáp án trước khi nộp
                     </p>
                 </div>
 

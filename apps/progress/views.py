@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from apps.courses.models import Course, Lesson
 from .models import Enrollment, LessonProgress
+from .services import get_course_progress
 
 
 @require_POST
@@ -93,29 +94,24 @@ def my_learning(request):
 
     learning_courses = []
 
+    
+    learning_courses = []
+
     for enrollment in enrollments:
-        course = enrollment.course
-
-        total = Lesson.objects.filter(
-            module__course=course,
-            is_published=True,
-        ).count()
-
-        completed = LessonProgress.objects.filter(
-            enrollment=enrollment,
-            lesson__module__course=course,
-            lesson__is_published=True,
-        ).count()
-
-        percent = round(completed / total * 100) if total else 0
+        progress = get_course_progress(enrollment)
 
         learning_courses.append({
-            "course": course,
-            "total": total,
-            "completed": completed,
-            "percent": percent,
+            "course": enrollment.course,
+            "total": progress["total_activities"],
+            "completed": progress["completed_activities"],
+            "percent": progress["progress_percent"],
+            "total_lessons": progress["total_lessons"],
+            "completed_lessons": progress["completed_lessons"],
+            "total_quizzes": progress["total_quizzes"],
+            "passed_quizzes": progress["passed_quizzes"],
         })
 
+    
     return render(
         request,
         "progress/my_learning.html",
