@@ -64,6 +64,38 @@
                 {{ lesson.content|safe  }}
             </div>
 
+            <!-- Lesson Completion -->
+
+            <div class="lesson-completion">
+
+                {% if is_enrolled and course.is_published and lesson.is_published %}
+
+                    {% if is_completed %}
+
+                        <div class="completion-success">
+                            ✓ Bạn đã hoàn thành bài học này!
+                        </div>
+
+                    {% else %}
+
+                        <form
+                            method="post"
+                            action="{% url 'progress:complete_lesson' course.slug lesson.module_id lesson.slug %}"
+                        >
+                            {% csrf_token %}
+
+                            <button type="submit" class="btn-primary">
+                                ✓ Đánh dấu hoàn thành
+                            </button>
+                        </form>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+
             <!-- Navigation -->
             <div class="lesson-navigation">
 

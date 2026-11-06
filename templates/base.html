@@ -25,16 +25,71 @@
             </a>
 
             <nav class="nav-links">
-                <a href="{% url 'core:home' %}">Trang chủ</a>
-                <a href="{% url 'courses:list' %}">Khóa học</a>
-                <a href="{% url 'core:home' %}#learning-paths">Lộ trình học</a>
-                <a href="/admin/">Quản trị</a>
+
+                <a href="{% url 'core:home' %}">
+                    Trang chủ
+                </a>
+
+                <a href="{% url 'core:home' %}#learning-paths">
+                    Lộ trình học
+                </a>
+
+                <a href="{% url 'courses:list' %}">
+                    Khóa học
+                </a>
+
+                {% if user.is_authenticated %}
+
+                    <span class="nav-username">
+                        {{ user.username }}
+                    </span>
+
+                    {% comment %} {% if user.is_staff %}
+                        <a href="{% url 'admin:index' %}">
+                            Quản trị
+                        </a>
+                    {% endif %} {% endcomment %}
+
+                    <form method="post"
+                        action="{% url 'logout' %}"
+                        class="nav-logout">
+
+                        {% csrf_token %}
+
+                        <button type="submit">
+                            Đăng xuất
+                        </button>
+                    </form>
+
+                {% else %}
+
+                    <a href="{% url 'login' %}">
+                        Đăng nhập
+                    </a>
+
+                    <a href="{% url 'register' %}"
+                    class="nav-signup">
+                        Đăng ký miễn phí
+                    </a>
+
+                {% endif %}
+
             </nav>
 
         </div>
     </header>
 
     <main>
+        {% if messages %}
+            <div class="container">
+                {% for message in messages %}
+                    <div class="site-message" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>

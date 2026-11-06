@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+{% block title %}Đăng nhập — TechLearn{% endblock %}
+
+{% block content %}
+<section class="catalog-section">
+    <div class="container login-container">
+
+        <h1>Đăng nhập TechLearn</h1>
+
+        {% if form.errors %}
+            <p class="form-error">
+                Tên đăng nhập hoặc mật khẩu không đúng.
+            </p>
+        {% endif %}
+
+        <form method="post"
+              action="{% url 'login' %}"
+              class="login-form">
+
+            {% csrf_token %}
+
+            <input type="hidden"
+                   name="next"
+                   value="{{ next }}">
+
+            <label for="username">Tên đăng nhập</label>
+            <input
+                id="username"
+                type="text"
+                name="username"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">Mật khẩu</label>
+            <input
+                id="password"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit" class="btn-primary">
+                Đăng nhập
+            </button>
+        </form>
+
+    </div>
+</section>
+{% endblock %}

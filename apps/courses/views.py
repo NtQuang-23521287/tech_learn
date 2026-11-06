@@ -1,9 +1,12 @@
 
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import Course
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from .models import CourseModule, Lesson
+from apps.progress.models import Enrollment, LessonProgress
 
 
 
@@ -33,6 +36,13 @@ def course_detail(request, slug):
         courses = courses.filter(is_published=True)
 
     course = get_object_or_404(courses, slug=slug)
+    
+    is_enrolled = (
+        request.user.is_authenticated
+        and course.enrollments.filter(
+            user=request.user
+        ).exists()
+    )
 
     modules = CourseModule.objects.filter(course=course)
 
@@ -50,6 +60,7 @@ def course_detail(request, slug):
     context = {
         "course": course,
         "modules": modules,
+        "is_enrolled": is_enrolled,
     }
 
     return render(
@@ -81,6 +92,39 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
     )
 
     course = lesson.module.course
+    
+    # Lấy enrollment của học viên hiện tại.
+    enrollment = None
+
+    if request.user.is_authenticated:
+        enrollment = Enrollment.objects.filter(
+            user=request.user,
+            course=course,
+        ).first()
+
+    # Học viên thường phải đăng ký mới được đọc bài.
+    # Staff vẫn có quyền xem trước khi biên tập.
+    if not is_staff and enrollment is None:
+        messages.warning(
+            request,
+            "Bạn cần tham gia khóa học để xem bài học."
+        )
+        return redirect(
+            "courses:detail",
+            slug=course.slug,
+        )
+
+    is_enrolled = enrollment is not None
+
+    # Kiểm tra bài học đã hoàn thành hay chưa.
+    is_completed = False
+
+    if enrollment:
+        is_completed = LessonProgress.objects.filter(
+            enrollment=enrollment,
+            lesson=lesson,
+        ).exists()
+
 
     visible_lessons = Lesson.objects.all()
 
@@ -132,5 +176,7 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
             "modules": modules,
             "previous_lesson": previous_lesson,
             "next_lesson": next_lesson,
+            "is_enrolled": is_enrolled,
+            "is_completed": is_completed,
         },
     )

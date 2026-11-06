@@ -663,3 +663,159 @@ a {
     padding: 16px 20px;
     color: var(--muted);
 }
+
+/* Login */
+
+.login-container {
+    max-width: 480px;
+}
+
+.login-container h1 {
+    margin-bottom: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.login-form label {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 13px 15px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font: inherit;
+}
+
+.login-form input:focus {
+    outline: 2px solid var(--primary);
+}
+
+.login-form button {
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.form-error {
+    color: #f87171;
+    margin-bottom: 18px;
+}
+
+/* Enrollment */
+
+.enrollment-section {
+    margin-top: 30px;
+}
+
+.enrollment-section button {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.enrolled-label {
+    display: inline-block;
+    padding: 12px 18px;
+    background: rgba(66, 211, 146, 0.12);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    font-weight: 600;
+}
+.site-message {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: #123d32;
+    border: 1px solid #42d392;
+    color: #b8f5d4;
+    border-radius: 8px;
+}
+/* Authentication Navigation */
+
+.nav-links {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-username {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.nav-links .nav-signup {
+    background: var(--primary);
+    color: #08151c;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.nav-links .nav-signup:hover {
+    background: #6ce3ad;
+    color: #08151c;
+}
+
+.nav-logout {
+    display: inline-flex;
+}
+
+.nav-logout button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+}
+
+.nav-logout button:hover {
+    color: var(--primary);
+}
+
+.auth-description {
+    color: var(--muted);
+    margin: 15px 0 25px;
+}
+
+.auth-description a {
+    color: var(--primary);
+}
+
+.login-form .errorlist {
+    color: #f87171;
+    padding-left: 20px;
+    font-size: 13px;
+}
+
+/* Lesson Completion */
+
+.lesson-completion {
+    margin-top: 35px;
+    padding: 25px 0;
+    border-top: 1px solid var(--border);
+}
+
+.lesson-completion button {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.completion-success {
+    display: inline-block;
+    padding: 14px 20px;
+    background: rgba(66, 211, 146, 0.12);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    color: var(--primary);
+    font-weight: 600;
+}

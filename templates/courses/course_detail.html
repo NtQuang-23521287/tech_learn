@@ -32,6 +32,56 @@
                 {% endif %}
             </div>
 
+            <div class="enrollment-section">
+
+                {% if course.is_published %}
+
+                    {% if user.is_authenticated %}
+
+                        {% if is_enrolled %}
+                            <p class="enrolled-label">
+                                ✓ Bạn đã tham gia khóa học này
+                            </p>
+                        {% else %}
+
+                            <form
+                                method="post"
+                                action="{% url 'progress:enroll' course.slug %}"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn-primary"
+                                >
+                                    Bắt đầu học miễn phí
+                                </button>
+                            </form>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'login' %}?next={{ request.path|urlencode }}"
+                            class="btn-primary"
+                        >
+                            Đăng nhập để bắt đầu học
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <p class="draft-label">
+                        Khóa học chưa xuất bản, hiện chưa mở đăng ký.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
         </div>
 
         <div class="curriculum">

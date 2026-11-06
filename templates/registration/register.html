@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Đăng ký — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="catalog-section">
+    <div class="container login-container">
+
+        <h1>Tham gia TechLearn</h1>
+
+        <p class="auth-description">
+            Tạo tài khoản miễn phí để bắt đầu học
+            Linux, Networking và System Administration.
+        </p>
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <label for="{{ form.username.id_for_label }}">
+                Tên đăng nhập
+            </label>
+
+            {{ form.username }}
+            {{ form.username.errors }}
+
+            <label for="{{ form.password1.id_for_label }}">
+                Mật khẩu
+            </label>
+
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+
+            <label for="{{ form.password2.id_for_label }}">
+                Xác nhận mật khẩu
+            </label>
+
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+
+            <button type="submit" class="btn-primary">
+                Tạo tài khoản miễn phí
+            </button>
+        </form>
+
+        <p class="auth-description">
+            Đã có tài khoản?
+            <a href="{% url 'login' %}">Đăng nhập</a>
+        </p>
+
+    </div>
+</section>
+
+{% endblock %}
