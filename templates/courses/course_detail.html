@@ -81,7 +81,39 @@
 
             </div>
 
+            
+            {% if is_enrolled and course.is_published %}
 
+            <section class="course-progress">
+
+                <div class="progress-header">
+                    <h3>Tiến độ học tập</h3>
+
+                    <span>{{ progress_percent }}%</span>
+                </div>
+
+                <div
+                    class="progress-track"
+                    role="progressbar"
+                    aria-label="Tiến độ khóa học"
+                    aria-valuenow="{{ progress_percent }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                >
+                    <div
+                        class="progress-fill"
+                        style="width: {{ progress_percent }}%;"
+                    ></div>
+                </div>
+
+                <p>
+                    Đã hoàn thành {{ completed_lessons }}
+                    trên {{ total_lessons }} bài học.
+                </p>
+
+            </section>
+
+            {% endif %}
         </div>
 
         <div class="curriculum">

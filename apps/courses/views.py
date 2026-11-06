@@ -1,11 +1,9 @@
-
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import render
-from .models import Course
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
-from .models import CourseModule, Lesson
+from .models import Course, CourseModule, Lesson
 from apps.progress.models import Enrollment, LessonProgress
 
 
@@ -43,6 +41,32 @@ def course_detail(request, slug):
             user=request.user
         ).exists()
     )
+    
+    total_lessons = 0
+    completed_lessons = 0
+    progress_percent = 0
+
+    if is_enrolled and course.is_published:
+
+        # Đếm các bài học đã xuất bản trong khóa học.
+        total_lessons = Lesson.objects.filter(
+            module__course=course,
+            is_published=True,
+        ).count()
+
+        # Đếm các bài học học viên đã hoàn thành.
+        completed_lessons = LessonProgress.objects.filter(
+            enrollment__user=request.user,
+            enrollment__course=course,
+            lesson__module__course=course,
+            lesson__is_published=True,
+        ).count()
+
+        if total_lessons > 0:
+            progress_percent = round(
+                completed_lessons / total_lessons * 100
+            )
+
 
     modules = CourseModule.objects.filter(course=course)
 
@@ -61,6 +85,9 @@ def course_detail(request, slug):
         "course": course,
         "modules": modules,
         "is_enrolled": is_enrolled,
+        "total_lessons": total_lessons,
+        "completed_lessons": completed_lessons,
+        "progress_percent": progress_percent,
     }
 
     return render(
