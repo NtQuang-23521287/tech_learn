@@ -1,4 +1,4 @@
-
+from django_prose_editor.fields import ProseEditorField
 from django.db import models
 
 
@@ -86,7 +86,28 @@ class Lesson(models.Model):
 
     slug = models.SlugField(max_length=220)
 
-    content = models.TextField()
+    
+    content = ProseEditorField(
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Heading": {"levels": [2, 3, 4]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Link": True,
+            "Code": True,
+            "CodeBlock": True,
+            "Blockquote": True,
+            "Table": True,
+            "TableRow": True,
+            "TableHeader": True,
+            "TableCell": True,
+        },
+        sanitize=True,
+    )
+
 
     order = models.PositiveIntegerField(default=1)
 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.core',
     'apps.courses',
+    "django_prose_editor",
 ]
 
 MIDDLEWARE = [

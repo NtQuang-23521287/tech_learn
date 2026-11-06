@@ -60,7 +60,11 @@
                         {% for lesson in module.lessons.all %}
 
                             <li>
-                                <span>📖 {{ lesson.title }}</span>
+                                <span>
+                                    <a href="{% url 'courses:lesson_detail' course.slug module.id lesson.slug %}">
+                                        📖 {{ lesson.title }}
+                                    </a>
+                                </span>
 
                                 {% if not lesson.is_published %}
                                     <span class="draft-label">

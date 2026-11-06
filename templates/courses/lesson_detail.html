@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+{% load course_markdown %}
+
+{% block title %}
+{{ lesson.title }} — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="lesson-page">
+    <div class="container lesson-layout">
+
+        <!-- Sidebar -->
+        <aside class="lesson-sidebar">
+
+            <a href="{% url 'courses:detail' course.slug %}"
+               class="back-link">
+                ← {{ course.title }}
+            </a>
+
+            <h3>Nội dung khóa học</h3>
+
+            {% for module in modules %}
+                <div class="sidebar-module">
+
+                    <h4>
+                        Chương {{ module.order }}:
+                        {{ module.title }}
+                    </h4>
+
+                    {% for item in module.lessons.all %}
+
+                        <a
+                            href="{% url 'courses:lesson_detail' course.slug module.id item.slug %}"
+                            class="sidebar-lesson {% if item.pk == lesson.pk %}active{% endif %}"
+                        >
+                            {{ item.title }}
+                        </a>
+
+                    {% empty %}
+                        <p>Chưa có bài học.</p>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+
+        </aside>
+
+        <!-- Main Lesson -->
+        <article class="lesson-main">
+
+            <span class="eyebrow">
+                {{ lesson.module.title }}
+            </span>
+
+            <h1>{{ lesson.title }}</h1>
+
+            {% if not lesson.is_published %}
+                <p class="draft-label">Bài học đang ở bản nháp</p>
+            {% endif %}
+
+            <div class="lesson-content">
+                {{ lesson.content|safe  }}
+            </div>
+
+            <!-- Navigation -->
+            <div class="lesson-navigation">
+
+                {% if previous_lesson %}
+                    <a href="{% url 'courses:lesson_detail' course.slug previous_lesson.module_id previous_lesson.slug %}">
+                        ← Bài trước
+                    </a>
+                {% else %}
+                    <span></span>
+                {% endif %}
+
+                {% if next_lesson %}
+                    <a href="{% url 'courses:lesson_detail' course.slug next_lesson.module_id next_lesson.slug %}">
+                        Bài tiếp theo →
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </article>
+
+    </div>
+</section>
+
+{% endblock %}
