@@ -64,6 +64,29 @@
                 {{ lesson.content|safe  }}
             </div>
 
+            
+            {% if lesson_quiz %}
+
+                <div class="lesson-completion">
+
+                    <h3>Kiểm tra kiến thức</h3>
+
+                    <p>
+                        Hoàn thành bài trắc nghiệm để
+                        kiểm tra những gì bạn đã học.
+                    </p>
+
+                    <a
+                        href="{% url 'quizzes:detail' lesson_quiz.id %}"
+                        class="btn-primary"
+                    >
+                        Làm bài kiểm tra
+                    </a>
+
+                </div>
+
+            {% endif %}
+            
             <!-- Lesson Completion -->
 
             <div class="lesson-completion">

@@ -5,7 +5,7 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from .models import Course, CourseModule, Lesson
 from apps.progress.models import Enrollment, LessonProgress
-
+from apps.quizzes.models import Quiz
 
 
 def course_list(request):
@@ -119,6 +119,13 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
     )
 
     course = lesson.module.course
+
+    quiz_query = Quiz.objects.filter(lesson=lesson)
+
+    if not request.user.is_staff:
+        quiz_query = quiz_query.filter(is_published=True)
+
+    lesson_quiz = quiz_query.first()
     
     # Lấy enrollment của học viên hiện tại.
     enrollment = None
@@ -205,5 +212,6 @@ def lesson_detail(request, course_slug, module_id, lesson_slug):
             "next_lesson": next_lesson,
             "is_enrolled": is_enrolled,
             "is_completed": is_completed,
+            "lesson_quiz": lesson_quiz,
         },
     )

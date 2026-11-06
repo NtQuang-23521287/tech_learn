@@ -27,4 +27,5 @@ urlpatterns = [
     path("accounts/register/", register, name="register",),
     path("accounts/logout/", LogoutView.as_view(next_page="core:home"), name="logout",),
     path("progress/", include("apps.progress.urls")),
+    path("quizzes/", include("apps.quizzes.urls")),
 ]

@@ -1,0 +1,115 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+{{ quiz.title }} — TechLearn
+{% endblock %}
+
+{% block content %}
+
+<section class="quiz-page">
+    <div class="container quiz-container">
+
+        <a
+            href="{% url 'courses:detail' course.slug %}"
+            class="back-link"
+        >
+            ← Quay lại khóa học
+        </a>
+
+        <div class="quiz-heading">
+            <span class="eyebrow">TECHLEARN QUIZ</span>
+
+            <h1>{{ quiz.title }}</h1>
+
+            <p>
+                Khóa học: {{ course.title }}
+            </p>
+
+            <p>
+                Điểm đạt yêu cầu:
+                {{ quiz.passing_score }}%
+            </p>
+
+            {% if not quiz.is_published %}
+                <span class="draft-label">
+                    Bản xem trước — chưa xuất bản
+                </span>
+            {% endif %}
+        </div>
+
+        {% if quiz_ready %}
+
+            <form method="post" class="quiz-form">
+                {% csrf_token %}
+
+                {% for question in questions %}
+
+                    <fieldset class="quiz-question">
+
+                        <legend>
+                            Câu {{ forloop.counter }}.
+                            {{ question.text }}
+                        </legend>
+
+                        <div class="quiz-choices">
+
+                            {% for choice in question.choices %}
+
+                                <label class="quiz-choice">
+
+                                    <input
+                                        type="radio"
+                                        name="question_{{ question.id }}"
+                                        value="{{ choice.id }}"
+                                        required
+                                    >
+
+                                    <span class="choice-letter">
+                                        {{ choice.label }}
+                                    </span>
+
+                                    <span>
+                                        {{ choice.text }}
+                                    </span>
+
+                                </label>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </fieldset>
+
+                {% endfor %}
+
+                <div class="quiz-submit">
+                    <button
+                        type="submit"
+                        class="btn-primary"
+                        disabled
+                    >
+                        Nộp bài
+                    </button>
+
+                    <p>
+                        Chức năng nộp bài sẽ được
+                        kích hoạt trong Bài 17D.
+                    </p>
+                </div>
+
+            </form>
+
+        {% else %}
+
+            <p class="draft-label">
+                Quiz chưa có đủ câu hỏi hoặc đáp án hợp lệ.
+                Hãy kiểm tra dữ liệu trong Django Admin.
+            </p>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}
