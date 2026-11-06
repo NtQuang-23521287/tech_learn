@@ -1,6 +1,7 @@
 # Python virtual environment
 .techlearn/
 .venv/
+.env/
 
 # Python cache
 __pycache__/

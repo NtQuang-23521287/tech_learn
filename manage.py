@@ -1,18 +1,22 @@
-# manager.py is a command-line utility that lets you interact with this Django project in various ways. You can read all the details about manage.py in the Django documentation.
+#!/usr/bin/env python
+"""Django's command-line utility for administrative tasks."""
+import os
+import sys
 
-#!/usr/bin/env python3
-import os # Làm việc với biến môi trường
-import sys # Đọc tham số dòng lệnh
 
-def main(): 
-    os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE", # Chỉ định module setting của Django
-        "config.settings" # Trỏ đến file settings.py trong thư mục config
-    )
+def main():
+    """Run administrative tasks."""
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    try:
+        from django.core.management import execute_from_command_line
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+    execute_from_command_line(sys.argv)
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv) # Thực thi lệnh quản lý Django với các tham số dòng lệnh được truyền vào
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
