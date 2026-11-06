@@ -869,3 +869,42 @@ a {
     font-size: 14px;
     color: var(--muted);
 }
+
+/* Student Learning Dashboard */
+
+.empty-learning {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 25px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.empty-learning h2 {
+    margin-bottom: 12px;
+}
+
+.empty-learning p {
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+.course-card .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.course-card .progress-header strong {
+    color: var(--primary);
+}
+
+.course-card .progress-track {
+    margin-bottom: 10px;
+}
+
+.course-card .btn-primary {
+    text-align: center;
+    margin-top: 12px;
+}

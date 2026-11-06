@@ -18,4 +18,10 @@ urlpatterns = [
         views.complete_lesson,
         name="complete_lesson",
     ),
+
+    path(
+    "my-learning/",
+    views.my_learning,
+    name="my_learning",
+),
 ]

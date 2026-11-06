@@ -26,6 +26,7 @@
 
             <nav class="nav-links">
 
+                <!-- Các mục hiển thị cho tất cả người dùng -->
                 <a href="{% url 'core:home' %}">
                     Trang chủ
                 </a>
@@ -40,15 +41,20 @@
 
                 {% if user.is_authenticated %}
 
+                    <!-- Chỉ hiển thị khi đã đăng nhập -->
+                    <a href="{% url 'progress:my_learning' %}">
+                        Khóa học của tôi
+                    </a>
+
                     <span class="nav-username">
                         {{ user.username }}
                     </span>
 
-                    {% comment %} {% if user.is_staff %}
+                    {% if user.is_staff %}
                         <a href="{% url 'admin:index' %}">
                             Quản trị
                         </a>
-                    {% endif %} {% endcomment %}
+                    {% endif %}
 
                     <form method="post"
                         action="{% url 'logout' %}"
@@ -63,6 +69,7 @@
 
                 {% else %}
 
+                    <!-- Chỉ hiển thị khi chưa đăng nhập -->
                     <a href="{% url 'login' %}">
                         Đăng nhập
                     </a>
@@ -75,6 +82,7 @@
                 {% endif %}
 
             </nav>
+
 
         </div>
     </header>

@@ -1,0 +1,84 @@
+
+{% extends "base.html" %}
+
+{% block title %}Khóa học của tôi — TechLearn{% endblock %}
+
+{% block content %}
+
+<section class="catalog-section">
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="eyebrow">MY LEARNING</span>
+            <h1>Khóa học của tôi</h1>
+            <p>
+                Theo dõi tiến độ và tiếp tục hành trình học tập.
+            </p>
+        </div>
+
+        <div class="course-grid">
+
+            {% for item in learning_courses %}
+
+                <article class="course-card">
+
+                    <span class="eyebrow">
+                        {{ item.course.category.name }}
+                    </span>
+
+                    <h3>{{ item.course.title }}</h3>
+
+                    {% if item.course.is_published %}
+                        <div class="progress-header">
+                            <span>Tiến độ</span>
+                            <strong>{{ item.percent }}%</strong>
+                        </div>
+
+                        <div class="progress-track">
+                            <div
+                                class="progress-fill"
+                                style="width: {{ item.percent }}%;">
+                            </div>
+                        </div>
+
+                        <p>
+                            {{ item.completed }}/{{ item.total }}
+                            bài học đã hoàn thành
+                        </p>
+
+                        <a
+                            href="{% url 'courses:detail' item.course.slug %}"
+                            class="btn-primary">
+                            Tiếp tục học
+                        </a>
+                    {% else %}
+                        <p>
+                            Khóa học đang tạm ngừng xuất bản.
+                        </p>
+                    {% endif %}
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-learning">
+                    <h2>Bạn chưa tham gia khóa học nào</h2>
+                    <p>
+                        Hãy khám phá danh sách khóa học miễn phí
+                        của TechLearn.
+                    </p>
+
+                    <a href="{% url 'courses:list' %}"
+                       class="btn-primary">
+                        Khám phá khóa học
+                    </a>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

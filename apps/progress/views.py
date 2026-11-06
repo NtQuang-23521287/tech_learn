@@ -1,9 +1,7 @@
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-
 from apps.courses.models import Course, Lesson
 from .models import Enrollment, LessonProgress
 
@@ -81,4 +79,45 @@ def complete_lesson(request, course_slug, module_id, lesson_slug):
         course_slug=course_slug,
         module_id=module_id,
         lesson_slug=lesson_slug,
+    )
+
+
+@login_required
+def my_learning(request):
+    enrollments = Enrollment.objects.filter(
+        user=request.user
+    ).select_related(
+        "course",
+        "course__category",
+    )
+
+    learning_courses = []
+
+    for enrollment in enrollments:
+        course = enrollment.course
+
+        total = Lesson.objects.filter(
+            module__course=course,
+            is_published=True,
+        ).count()
+
+        completed = LessonProgress.objects.filter(
+            enrollment=enrollment,
+            lesson__module__course=course,
+            lesson__is_published=True,
+        ).count()
+
+        percent = round(completed / total * 100) if total else 0
+
+        learning_courses.append({
+            "course": course,
+            "total": total,
+            "completed": completed,
+            "percent": percent,
+        })
+
+    return render(
+        request,
+        "progress/my_learning.html",
+        {"learning_courses": learning_courses},
     )
